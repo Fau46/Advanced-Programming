@@ -100,4 +100,17 @@ public class Bus implements Serializable {
     public void removeVetoableChangelistenerNumPassenger(VetoableChangeListener l){
         vetosNumPassenger.removeVetoableChangeListener(l);
     }
+
+    public void activate(){
+        for(int i=0; i<3; i++){
+            int newNumPassenger = (int) (Math.random() * this.numPassenger); //decrease in a range between [0, numPassenger]
+            this.setNumPassenger(newNumPassenger);
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
