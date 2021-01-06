@@ -17,10 +17,12 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
     private JButton button;
     private Bus bus;
 
+
     public static void main(String[] args) {
         BusBoard busBoard = new BusBoard();
 
     }
+
 
     public BusBoard(){
         bus = new Bus();
@@ -28,6 +30,7 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
         bus.addPropertyChangeListenerDoorOpen(this);
         bus.addPropertyChangeListenerNumPassenger(this);
 
+        //Create the frame
         window = new JFrame("BusBoard");
         window.setSize(800,600);
         window.setLocation(100,100);
@@ -58,26 +61,31 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
         window.add(panel3);
 
         window.setVisible(true);
+//        bus.activate();
     }
+
 
     public void setDoorOpen(String doorOpen) {
         this.doorOpen.setText(doorOpen);
     }
 
+
     public void setNumPassenger(String numPassenger) {
         this.numPassenger.setText(numPassenger);
     }
 
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getPropertyName() == "numPassenger") {
+        if(evt.getPropertyName().equals("numPassenger")) {
             this.setNumPassenger(String.valueOf(evt.getNewValue()));
         }
         else {
             this.setDoorOpen(String.valueOf(evt.getNewValue()));
         }
-        System.out.println("new event: "+evt.getPropertyName()+" "+evt.getOldValue()+" "+evt.getNewValue());
+        System.out.println("[EVENT] Name: "+evt.getPropertyName()+" | Old value: "+evt.getOldValue()+" | New value: "+evt.getNewValue());
     }
+
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
@@ -89,14 +97,14 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
                 try{
                     newValue = Integer.valueOf(textField.getText()).intValue();
                 }catch (NumberFormatException e){
-                    System.out.println("Input not valid");
+                    System.out.println("[INFO] Input not valid");
                     button.setBackground(null);
                     textField.setText("1");
                     return;
                 }
 
                 if(newValue < 1 || newValue > 5){
-                    System.out.println("Input must be between 1 and 5");
+                    System.out.println("[INFO] Input must be between 1 and 5");
                     button.setBackground(null);
                     textField.setText("1");
                     return;
@@ -108,6 +116,6 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
             }
         };
         Timer timer = new Timer("Timer");
-        timer.schedule(task,2000l);
+        timer.schedule(task,2000L);
     }
 }

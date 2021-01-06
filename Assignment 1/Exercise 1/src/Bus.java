@@ -22,6 +22,8 @@ public class Bus implements Serializable {
         vetosNumPassenger = new VetoableChangeSupport(this);
     }
 
+
+    //Setter method for doorOpen attribute
     public void setDoorOpen(boolean newDoorOpen){
         boolean oldDoorOpen = doorOpen;
         doorOpen = newDoorOpen;
@@ -29,20 +31,21 @@ public class Bus implements Serializable {
     }
 
 
+    //Setter method for numPassenger attribute
     public void setNumPassenger(int newNumPassenger){
         int oldNumPassenger = numPassenger;
         try {
             vetosNumPassenger.fireVetoableChange("numPassenger", numPassenger, newNumPassenger);
         } catch (PropertyVetoException e) {
-            System.out.println("[numPassenger] Change rejected: "+e.getMessage());
+            System.out.println("[VETO] Change rejected: "+e.getMessage());
             return;
         }
 
         if(newNumPassenger > capacity){
-            System.out.println("The number of passenger is more than the bus capacity");
+            System.out.println("[INFO] The number of passenger is more than the bus capacity");
         }
         else if(newNumPassenger < 0){
-            System.out.println("Value not accepted");
+            System.out.println("[INFO] Value not accepted");
         }
         else{
             if (newNumPassenger > oldNumPassenger){
@@ -56,14 +59,12 @@ public class Bus implements Serializable {
                     }
                 };
                 Timer timer = new Timer("Timer");
-                timer.schedule(task,3000l);
+                timer.schedule(task,3000L);
             }
             else{
                 numPassenger = newNumPassenger;
                 listenerNumPassenger.firePropertyChange("numPassenger", oldNumPassenger, numPassenger);
             }
-
-
         }
     }
 
@@ -76,6 +77,7 @@ public class Bus implements Serializable {
     public int getNumPassenger() {
         return this.numPassenger;
     }
+
 
     //Method that add listener to listenerDoorOpen
     public void addPropertyChangeListenerDoorOpen(PropertyChangeListener l){
@@ -112,16 +114,17 @@ public class Bus implements Serializable {
         vetosNumPassenger.removeVetoableChangeListener(l);
     }
 
-    public void activate(){
-        for(int i=0; i<3; i++){
-            int newNumPassenger = (int) (Math.random() * this.numPassenger); //decrease in a range between [0, numPassenger]
-            this.setNumPassenger(newNumPassenger);
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    //Activate method
+    public void activate(){
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                int newNumPassenger = (int) ((Math.random() * (numPassenger-1))+1); //the output is in a range between (0, numPassenger]
+                setNumPassenger(numPassenger - newNumPassenger);
             }
-        }
+        };
+        Timer timer = new Timer("Timer");
+        timer.schedule(task,10000L,15000L);
     }
 }
