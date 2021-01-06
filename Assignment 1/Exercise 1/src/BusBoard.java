@@ -4,9 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.Serializable;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class BusBoard extends JFrame implements Serializable, PropertyChangeListener, ActionListener {
+
+public class BusBoard extends JFrame implements PropertyChangeListener, ActionListener {
 
     private JFrame window;
     private JLabel numPassenger;
@@ -30,28 +32,35 @@ public class BusBoard extends JFrame implements Serializable, PropertyChangeList
         window.setSize(800,600);
         window.setLocation(100,100);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setLayout(new GridLayout(2,2));
+        window.setLayout(new GridLayout(3,1));
 
+        JLabel numPassengerLabel = new JLabel("Number of passenger: ");
         numPassenger = new JLabel(String.valueOf(bus.getNumPassenger()));
-        doorOpen = new JLabel(String.valueOf(bus.getDoorOpen()));
         JPanel panel1 = new JPanel();
+        panel1.add(numPassengerLabel);
         panel1.add(numPassenger);
-        panel1.add(doorOpen);
         window.add(panel1);
+
+
+        JLabel doorOpenLabel = new JLabel("Door opened: ");
+        doorOpen = new JLabel(String.valueOf(bus.getDoorOpen()));
+        JPanel panel2 = new JPanel();
+        panel2.add(doorOpenLabel);
+        panel2.add(doorOpen);
+        window.add(panel2);
 
         textField = new JTextField("1",16);
         button = new JButton("ENTER");
         button.addActionListener(this);
-        JPanel panel2 = new JPanel();
-        panel2.add(textField);
-        panel2.add(button);
-        window.add(panel2);
+        JPanel panel3 = new JPanel();
+        panel3.add(textField);
+        panel3.add(button);
+        window.add(panel3);
 
         window.setVisible(true);
     }
 
     public void setDoorOpen(String doorOpen) {
-        System.out.println("son qui"+ doorOpen);
         this.doorOpen.setText(doorOpen);
     }
 
@@ -61,7 +70,9 @@ public class BusBoard extends JFrame implements Serializable, PropertyChangeList
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getPropertyName() == "numPassenger") this.setNumPassenger(String.valueOf(evt.getNewValue()));
+        if(evt.getPropertyName() == "numPassenger") {
+            this.setNumPassenger(String.valueOf(evt.getNewValue()));
+        }
         else {
             this.setDoorOpen(String.valueOf(evt.getNewValue()));
         }
@@ -70,6 +81,33 @@ public class BusBoard extends JFrame implements Serializable, PropertyChangeList
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        bus.setNumPassenger(Integer.valueOf(textField.getText()).intValue());
+        button.setBackground(Color.RED);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                int newValue;
+                try{
+                    newValue = Integer.valueOf(textField.getText()).intValue();
+                }catch (NumberFormatException e){
+                    System.out.println("Input not valid");
+                    button.setBackground(null);
+                    textField.setText("1");
+                    return;
+                }
+
+                if(newValue < 1 || newValue > 5){
+                    System.out.println("Input must be between 1 and 5");
+                    button.setBackground(null);
+                    textField.setText("1");
+                    return;
+                }
+
+                bus.setNumPassenger(bus.getNumPassenger()+newValue);
+                button.setBackground(null);
+                textField.setText("1");
+            }
+        };
+        Timer timer = new Timer("Timer");
+        timer.schedule(task,2000l);
     }
 }

@@ -1,5 +1,9 @@
 import java.beans.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Bus implements Serializable {
     private int capacity;
@@ -43,16 +47,23 @@ public class Bus implements Serializable {
         else{
             if (newNumPassenger > oldNumPassenger){
                 setDoorOpen(true);
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                setDoorOpen(false);
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        setDoorOpen(false);
+                        numPassenger = newNumPassenger;
+                        listenerNumPassenger.firePropertyChange("numPassenger", oldNumPassenger, numPassenger);
+                    }
+                };
+                Timer timer = new Timer("Timer");
+                timer.schedule(task,3000l);
+            }
+            else{
+                numPassenger = newNumPassenger;
+                listenerNumPassenger.firePropertyChange("numPassenger", oldNumPassenger, numPassenger);
             }
 
-            numPassenger = newNumPassenger;
-            listenerNumPassenger.firePropertyChange("numPassenger", oldNumPassenger, numPassenger);
+
         }
     }
 
