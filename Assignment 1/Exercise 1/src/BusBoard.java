@@ -61,7 +61,7 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
         window.add(panel3);
 
         window.setVisible(true);
-//        bus.activate();
+        bus.activate();
     }
 
 
