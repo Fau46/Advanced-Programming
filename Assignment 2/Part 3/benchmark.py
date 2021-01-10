@@ -2,7 +2,7 @@ from time import perf_counter_ns
 import threading
 import sys
 
-
+""" Exercise 6 - A decorator for benchmarking """
 class benchmark(object):
 
     def __init__(self, warmup=0, iter=1, verbose=False, csv_file=None):
@@ -65,6 +65,9 @@ class benchmark(object):
       return wrapper_benchmark(*args, **kwargs)
 
 
+
+
+""" Exercise 7 - Testing the decorator with multithreading """
 def test(func,threads,times):
   @benchmark(0,1,True,f"f_{threads}_{times}.csv")
   def run_test():
@@ -105,6 +108,10 @@ if __name__ == "__main__":
   test(fibonacci, 4, 4)
   print("\n\n****** TEST (8,2) ******")
   test(fibonacci, 8, 2)
+
+
+
+
 
 
 """ QUESTION: Discuss briefly the results in a comment in the Python file."""
