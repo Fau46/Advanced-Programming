@@ -16,7 +16,7 @@ public class WordCounter extends MapReduce<String, String, List<String>, Integer
     @Override
     protected Stream<Pair<String, List<String>>> read() {
 
-        System.out.print("[COUNTING WORDS]\nInsert the absolute path of your txt file: ");
+        System.out.print("[COUNTING WORDS]\nInsert the absolute path of your directory: ");
         Scanner input = new Scanner(System.in);
         String path = input.nextLine();
         Reader reader = new Reader(Path.of(path));
@@ -35,12 +35,12 @@ public class WordCounter extends MapReduce<String, String, List<String>, Integer
         List<Pair<String, Integer>> newList = new ArrayList<>();
 
         input.forEach( x -> {
-            List<String> list = x.getValue();
+            List<String> list = x.getValue(); //Get the list with all the lines of the file
             for (int i = 0; i < list.size(); i++) {
-                String[] strings = list.get(i).split(" ");
+                String[] strings = list.get(i).split(" "); //Split each line
                 Map<String, Integer> auxMap = new HashMap<>();
                 for (String string : strings) {
-                    if(
+                    if(                                 //Delete some extra characters
                             string.startsWith("'") ||
                             string.startsWith("—") ||
                             string.startsWith("‘") ||
@@ -71,9 +71,9 @@ public class WordCounter extends MapReduce<String, String, List<String>, Integer
         List<Pair<String,Integer>> newList = new ArrayList<>();
 
         input.forEach(x->{
-            List<Integer> list = x.getValue();
+            List<Integer> list = x.getValue(); //Get the list with the multiplicity of key per each line inside the file
             int accum = 0;
-            for(Integer element : list){
+            for(Integer element : list){ //Sum all the multiplicity
                 accum += element;
             }
             newList.add(new Pair<>(x.getKey(), accum));

@@ -16,6 +16,8 @@ public abstract class MapReduce<K1,K2,V1,V2,V3>{
 
     }
 
+
+    //Method that group all the values with the same key in a list and after it sort the keys
     private Stream<Pair<K2,List<V2>>> groupAndSort(Stream<Pair<K2,V2>> input){
         Map<K2, List<V2>> list = new HashMap<>();
 

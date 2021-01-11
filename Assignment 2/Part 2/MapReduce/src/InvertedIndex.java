@@ -11,10 +11,11 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
 
     public InvertedIndex(){}
 
+
     @Override
     protected Stream<Pair<String, List<String>>> read() {
 
-        System.out.print("[INVERTED INDEX]\nInsert the absolute path of your txt file: ");
+        System.out.print("[INVERTED INDEX]\nInsert the absolute path of your directory: ");
         Scanner input = new Scanner(System.in);
         String path = input.nextLine();
         Reader reader = new Reader(Path.of(path));
@@ -27,15 +28,16 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
         return null;
     }
 
+
     @Override
     protected Stream<Pair<String,Pair<String,Integer>>> map(Stream<Pair<String,List<String>>> input) {
         List<Pair<String,Pair<String,Integer>>> newList = new ArrayList<>();
 
         input.forEach(x ->{
-            List<String> list = x.getValue();
+            List<String> list = x.getValue(); //Get the list with all the lines of the file
             String key = x.getKey();
             for(int i = 0; i<list.size(); i++){
-                String[] strings = list.get(i).split(" ");
+                String[] strings = list.get(i).split(" "); //Split each line
                 for (String string : strings){
                     if(
                         string.startsWith("'") ||
@@ -46,7 +48,7 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
                         string = string.substring(1);
                     }
                     string = string.replaceAll("[“.,!?”()_\"]", "");
-                    if(string.length() > 3) {
+                    if(string.length() > 3) { //Get only the strings with a length > of 3
                         Pair<String, Integer> value = new Pair<>(key, i);
                         newList.add(new Pair<>(string, value));
                     }
@@ -57,40 +59,39 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
         return newList.stream();
     }
 
+
     @Override
     protected int compare(String a, String b) {
         return a.compareTo(b);
     }
 
+
     @Override
     protected Stream<Pair<String, String>> reduce(Stream<Pair<String, List<Pair<String, Integer>>>> input) {
         List<Pair<String,String>> newList = new ArrayList<>();
-        List<Pair<String,String>> newListNoDuplicates = new ArrayList<>();
         List<String> stringList = new ArrayList<>();
 
         input.forEach(x ->{
-            List<Pair<String,Integer>> values = x.getValue();
+            List<Pair<String,Integer>> values = x.getValue(); //Get the list with pair objects
             String key = x.getKey();
-            values
+            values //Stream of Pair object
                 .stream()
                 .sorted((z,y) -> compareTo(z,y))
                 .forEach( w -> {
                     String string = w.getKey()+", "+ w.getValue().toString();
-//                    newList.add(new Pair<>(key,string));
-                    stringList.add(key+"!"+string);
+                    stringList.add(key+"!"+string); //Merge key and value and create a single string, used for distinct method below
                 }
 
             );
         });
 
         stringList.stream().distinct().forEach(x ->{
-            String[] strings = x.split("!");
+            String[] strings = x.split("!"); //Split the string for retrieve the key and the value
             String key = strings[0];
             String value = strings[1];
             newList.add(new Pair<>(key,value));
         });
-//        newList.stream().distinct().forEach(x -> newListNoDuplicates.add(new Pair<>(x.getKey(), x.getValue())));
-//        newListNoDuplicates = filter(newList); //TODO mettere filter nel return direttamente
+
         return newList.stream();
     }
 
@@ -116,17 +117,4 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
         }
     }
 
-    private List<Pair<String, String>> filter(List<Pair1<String, String>> lst) {
-        List<Pair<String,String>> aux = new ArrayList<>();
-        for(int i=0; i<lst.size()-1; i++){
-            Pair1<String,String> p1 = lst.get(i);
-            Pair1<String,String> p2 = lst.get(i+1);
-            if(!p1.equals(p2)) aux.add(new Pair<>(p1.getKey(),p2.getValue()));
-        }
-
-//        Pair1<String,String> p1 = lst.get(lst.size()-2);
-//        Pair1<String,String> p2 = lst.get(lst.size()-1);
-//        if(!p2.equals(p1)) aux.add(new Pair<>(p2.getKey(), p2.getValue()));
-        return aux;
-    }
 }

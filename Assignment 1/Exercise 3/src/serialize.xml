@@ -1,15 +1,15 @@
 <Test>
    <firstName type="String">Girolamo</firstName>
-   <lastName type="String">Gonzales</lastName>
+   <surname type="String">Gonzales</surname>
    <age type="int">28</age>
 </Test>
 <Test>
    <firstName type="String">Fausto</firstName>
-   <lastName type="String">Frasca</lastName>
+   <surname type="String">Frasca</surname>
    <age type="int">80</age>
 </Test>
 <Test>
    <firstName type="String">Mario</firstName>
-   <lastName type="String">Rossi</lastName>
+   <surname type="String">Rossi</surname>
    <age type="int">46</age>
 </Test>

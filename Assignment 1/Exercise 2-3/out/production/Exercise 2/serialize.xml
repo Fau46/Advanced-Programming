@@ -1,0 +1,12 @@
+<Test>
+   <firstName type="String">Girolamo</firstName>
+   <surname type="String">Gonzales</surname>
+   <age type="int">28</age>
+   <gender type="char">F</gender>
+</Test>
+<Test>
+   <firstName type="String">Fausto</firstName>
+   <surname type="String">Frasca</surname>
+   <age type="int">80</age>
+   <gender type="char">M</gender>
+</Test>

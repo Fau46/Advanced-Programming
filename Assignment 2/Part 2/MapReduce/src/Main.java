@@ -3,7 +3,6 @@ public class Main {
         WordCounter wc = new WordCounter();
         wc.run();
 
-
         InvertedIndex invertedIndex = new InvertedIndex();
         invertedIndex.run();
 

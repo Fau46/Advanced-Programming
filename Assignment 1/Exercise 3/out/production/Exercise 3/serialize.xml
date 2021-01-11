@@ -1,0 +1,15 @@
+<Test>
+   <firstName type="String">Girolamo</firstName>
+   <surname type="String">Gonzales</surname>
+   <age type="int">28</age>
+</Test>
+<Test>
+   <firstName type="String">Fausto</firstName>
+   <surname type="String">Frasca</surname>
+   <age type="int">80</age>
+</Test>
+<Test>
+   <firstName type="String">Mario</firstName>
+   <surname type="String">Rossi</surname>
+   <age type="int">46</age>
+</Test>
