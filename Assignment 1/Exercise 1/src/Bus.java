@@ -48,7 +48,7 @@ public class Bus implements Serializable {
             System.out.println("[INFO] Value not accepted");
         }
         else{
-            if (newNumPassenger > oldNumPassenger){
+            if (newNumPassenger > oldNumPassenger){ //Check if new passengers enter into the bus
                 setDoorOpen(true);
                 TimerTask task = new TimerTask() {
                     @Override
@@ -59,7 +59,7 @@ public class Bus implements Serializable {
                     }
                 };
                 Timer timer = new Timer("Timer");
-                timer.schedule(task,3000L);
+                timer.schedule(task,3000L); //The timer perform the task after 2 secs
             }
             else{
                 numPassenger = newNumPassenger;
@@ -125,6 +125,6 @@ public class Bus implements Serializable {
             }
         };
         Timer timer = new Timer("Timer");
-        timer.schedule(task,10000L,15000L);
+        timer.schedule(task,10000L,15000L); //The timer perform the task every 15 secs after a delay of 10 secs
     }
 }

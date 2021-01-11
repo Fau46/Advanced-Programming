@@ -40,15 +40,15 @@ public class WordCounter extends MapReduce<String, String, List<String>, Integer
                 String[] strings = list.get(i).split(" "); //Split each line
                 Map<String, Integer> auxMap = new HashMap<>();
                 for (String string : strings) {
-                    if(                                 //Delete some extra characters
+                    if(
                             string.startsWith("'") ||
                             string.startsWith("—") ||
                             string.startsWith("‘") ||
                             string.startsWith("’")
                     ){
-                        string = string.substring(1);
+                        string = string.substring(1); //Delete unimportant first character
                     }
-                    string = string.replaceAll("[“;.,!?”()_\"]", "");
+                    string = string.replaceAll("[“;.,!?”()_\"]", ""); //Delete unimportant characters
                     if (string.length() > 3) {
                         if (!auxMap.containsKey(string)) auxMap.put(string, 1);
                         else auxMap.put(string, auxMap.get(string) + 1);

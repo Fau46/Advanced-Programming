@@ -37,6 +37,7 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLayout(new GridLayout(3,1));
 
+        //Label for numPassenger
         JLabel numPassengerLabel = new JLabel("Number of passenger: ");
         numPassenger = new JLabel(String.valueOf(bus.getNumPassenger()));
         JPanel panel1 = new JPanel();
@@ -44,7 +45,7 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
         panel1.add(numPassenger);
         window.add(panel1);
 
-
+        //Label for doorOpen
         JLabel doorOpenLabel = new JLabel("Door opened: ");
         doorOpen = new JLabel(String.valueOf(bus.getDoorOpen()));
         JPanel panel2 = new JPanel();
@@ -52,6 +53,7 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
         panel2.add(doorOpen);
         window.add(panel2);
 
+        //Label for input text
         textField = new JTextField("1",16);
         button = new JButton("ENTER");
         button.addActionListener(this);
@@ -60,8 +62,9 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
         panel3.add(button);
         window.add(panel3);
 
+        //Print JFrame
         window.setVisible(true);
-        bus.activate();
+        bus.activate(); //Start activate method of Bus
     }
 
 
@@ -95,7 +98,7 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
             public void run() {
                 int newValue;
                 try{
-                    newValue = Integer.valueOf(textField.getText()).intValue();
+                    newValue = Integer.valueOf(textField.getText()).intValue(); //Take the input value
                 }catch (NumberFormatException e){
                     System.out.println("[INFO] Input not valid");
                     button.setBackground(null);
@@ -105,17 +108,17 @@ public class BusBoard extends JFrame implements PropertyChangeListener, ActionLi
 
                 if(newValue < 1 || newValue > 5){
                     System.out.println("[INFO] Input must be between 1 and 5");
-                    button.setBackground(null);
-                    textField.setText("1");
+                    button.setBackground(null); //Reset button
+                    textField.setText("1"); //Reset field
                     return;
                 }
 
-                bus.setNumPassenger(bus.getNumPassenger()+newValue);
-                button.setBackground(null);
-                textField.setText("1");
+                bus.setNumPassenger(bus.getNumPassenger()+newValue); //Set new numPassenger
+                button.setBackground(null); //Reset button
+                textField.setText("1"); //Reset field
             }
         };
         Timer timer = new Timer("Timer");
-        timer.schedule(task,2000L);
+        timer.schedule(task,2000L); //Perform the task after 2 secs
     }
 }

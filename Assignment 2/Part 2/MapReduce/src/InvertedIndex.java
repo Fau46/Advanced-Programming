@@ -37,7 +37,7 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
             List<String> list = x.getValue(); //Get the list with all the lines of the file
             String key = x.getKey();
             for(int i = 0; i<list.size(); i++){
-                String[] strings = list.get(i).split(" "); //Split each line
+                String[] strings = list.get(i).split(" "); //Retrieve each word in line i
                 for (String string : strings){
                     if(
                         string.startsWith("'") ||
@@ -45,9 +45,9 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
                         string.startsWith("‘") ||
                         string.startsWith("’")
                     ){
-                        string = string.substring(1);
+                        string = string.substring(1); //Delete unimportant first character
                     }
-                    string = string.replaceAll("[“.,!?”()_\"]", "");
+                    string = string.replaceAll("[“.,!?”()_\"]", ""); //Delete unimportant characters
                     if(string.length() > 3) { //Get only the strings with a length > of 3
                         Pair<String, Integer> value = new Pair<>(key, i);
                         newList.add(new Pair<>(string, value));
@@ -78,8 +78,8 @@ public class InvertedIndex extends MapReduce<String, String, List<String >, Pair
                 .stream()
                 .sorted((z,y) -> compareTo(z,y))
                 .forEach( w -> {
-                    String string = w.getKey()+", "+ w.getValue().toString();
-                    stringList.add(key+"!"+string); //Merge key and value and create a single string, used for distinct method below
+                    String string = w.getKey()+", "+ w.getValue().toString(); //Merge key and value and create a single string, used for distinct method below
+                    stringList.add(key+"!"+string);
                 }
 
             );

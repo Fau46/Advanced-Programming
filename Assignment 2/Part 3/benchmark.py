@@ -118,7 +118,7 @@ if __name__ == "__main__":
 """ 
   ANSWER: As expected the execution of the method test with multithread is more 
   slower than execute it with a single thread. The cause is the GIL, with multithread 
-  program each thread need to way that the thread in execution release the lock of the 
-  interpreter while with a single thread there isn't this problem
+  program each thread need to wait that the thread in execution release the lock of the 
+  interpreter, while with a single thread there isn't this problem
 """
 

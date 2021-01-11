@@ -26,4 +26,3 @@ instance Functor ListBag where
 a1 = LB [(3,2),(1,1)]
 a2 = LB [(2,2), (2,2)]
 a3 = LB [(1,1), (3,-1)]
-a4 = LB []

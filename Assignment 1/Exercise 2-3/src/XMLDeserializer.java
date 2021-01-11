@@ -7,7 +7,7 @@ public class XMLDeserializer {
     public XMLDeserializer(){}
 
     public static Object[] deserialize(String path) {
-        if(!path.endsWith(".xml")) new IllegalArgumentException().printStackTrace();
+        if(!path.endsWith(".xml")) new IllegalArgumentException().printStackTrace(); //Accept only xml files
 
         File xmlfile = new File(path);
         BufferedReader reader;
@@ -16,21 +16,22 @@ public class XMLDeserializer {
         try {
             reader = new BufferedReader(new FileReader(xmlfile));
 
-            String line = reader.readLine();
+            String line = reader.readLine(); //Read the class name
             String className = line.replaceAll("[<>]","");
 
             Class class1 = Class.forName(className);
-            if(!class1.isAnnotationPresent(XMLable.class)) return null;
+            if(!class1.isAnnotationPresent(XMLable.class)) return null; //Check if the class is serializable
 
             while (line != null){
                 ArrayList<String> instanceVariables = new ArrayList<>();
-                while(!line.equals("</"+className+">")){
+
+                while(!line.equals("</"+className+">")){ //Read all instance variables
                     line = reader.readLine();
                     if(!line.equals("</"+className+">")) instanceVariables.add(line);
                 }
                 objectsInstance.add(deserializeObject(class1, className, instanceVariables));
 
-                line = reader.readLine();
+                line = reader.readLine(); //Read next class name e.g. <Test> or EOF
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -55,15 +56,16 @@ public class XMLDeserializer {
 
         String line = null;
         for(String l : instanceVariables){
-            line = l.substring(4);
-            String[] fields = line.split(" ");
+            line = l.substring(4); //Delete tab and < characters
+            String[] fields = line.split(" "); //Split for retrieve the field's name
             String tagName = fields[0];
             Field field = retrieveField(cl, tagName);
 
-            String[] typeAndValue = fields[1].split(">");
-            String type = typeAndValue[0].replaceAll("type=\"","");
+            String[] typeAndValue = fields[1].split(">"); //split the type and the value in two string
+            String type = typeAndValue[0].replaceAll("type=\"",""); //Clean the string from unimportant characters for retrieve the field's type
             type = type.replaceAll("[\"]","");
-            String value = typeAndValue[1].replaceAll("</"+tagName, "");
+            String value = typeAndValue[1].replaceAll("</"+tagName, ""); //Clean the string from unimportant characters for retrieve the field's value
+
             try {
                 switch (type){
                     case "boolean":
@@ -110,16 +112,18 @@ public class XMLDeserializer {
         try {
             f = cl.getDeclaredField(fieldString);
             f.setAccessible(true);
-        } catch (NoSuchFieldException e) {
+        } catch (NoSuchFieldException e) { //Manage the case that the field is stored with a different name
             for(Field field : cl.getDeclaredFields()){
                 field.setAccessible(true);
-                if(field.isAnnotationPresent(XMLfield.class)){//Check if the annotation is present for the serialization
+
+                if(field.isAnnotationPresent(XMLfield.class)){ //Check if the annotation is present for the serialization
                     XMLfield annotation = field.getAnnotation(XMLfield.class);
                     String tagName = !annotation.name().equals("")? annotation.name() : field.getName();
                     if(tagName.equals(fieldString)) f = field;
                 }
             }
-            if(f == null) new NoSuchFieldException().printStackTrace();
+
+            if(f == null) new NoSuchFieldException().printStackTrace(); //Manage the case when the fieldString is not associated to a field
         }
         
         return f;
