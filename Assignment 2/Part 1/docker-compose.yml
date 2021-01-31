@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  haskell:
+    build: .
+    volumes:
+      - ~/GitHub/Advanced-Programming/Assignment 2/Part 1:/home
+    stdin_open: true
